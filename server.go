@@ -1,15 +1,15 @@
 package main
 
 import (
-	"net/http"
+	"golangsensors/db"
 
-	"github.com/labstack/echo/v4"
+	"golangsensors/routes"
 )
 
 func main() {
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":1323"))
+	db.Init()
+
+	e := routes.Init()
+
+	e.Logger.Fatal(e.Start(":1234"))
 }
