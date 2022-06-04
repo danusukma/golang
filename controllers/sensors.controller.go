@@ -4,6 +4,7 @@ import (
 	"golangsensors/models"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo"
 )
@@ -18,16 +19,14 @@ func FetchAllSensors(c echo.Context) error {
 }
 
 func StoreSensors(c echo.Context) error {
-	sensor_value := c.FormValue("sensor_value")
+	sensorvalue := c.FormValue("sensorvalue")
 	id1 := c.FormValue("id1")
 	id2 := c.FormValue("id2")
-	timestamp := c.FormValue("timestamp")
 
-	conv_sensor_value, err := strconv.Atoi(sensor_value)
+	conv_sensorvalue, err := strconv.Atoi(sensorvalue)
 	conv_id1, err := strconv.Atoi(id1)
-	conv_timestamp, err := strconv.Atoi(timestamp)
 
-	result, err := models.StoreSensors(conv_sensor_value, conv_id1, id2, conv_timestamp)
+	result, err := models.StoreSensors(conv_sensorvalue, conv_id1, id2)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
@@ -37,21 +36,19 @@ func StoreSensors(c echo.Context) error {
 
 func UpdateSensors(c echo.Context) error {
 	id := c.FormValue("id")
-	sensor_value := c.FormValue("sensor_value")
+	sensorvalue := c.FormValue("sensorvalue")
 	id1 := c.FormValue("id1")
 	id2 := c.FormValue("id2")
-	timestamp := c.FormValue("timestamp")
 
 	conv_id, err := strconv.Atoi(id)
-	conv_sensor_value, err := strconv.Atoi(sensor_value)
+	conv_sensorvalue, err := strconv.Atoi(sensorvalue)
 	conv_id1, err := strconv.Atoi(id1)
-	conv_timestamp, err := strconv.Atoi(timestamp)
 
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 
-	result, err := models.UpdateSensors(conv_id, conv_sensor_value, conv_id1, id2, conv_timestamp)
+	result, err := models.UpdateSensors(conv_id, conv_sensorvalue, conv_id1, id2)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
@@ -60,9 +57,9 @@ func UpdateSensors(c echo.Context) error {
 }
 
 func DeleteSensors(c echo.Context) error {
-	id := c.FormValue("id")
+	idx := c.FormValue("idx")
 
-	conv_id, err := strconv.Atoi(id)
+	conv_id, err := strconv.Atoi(strings.TrimSpace(idx))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}

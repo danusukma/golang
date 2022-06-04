@@ -5,15 +5,23 @@ import (
 	"golangsensors/db"
 	"net/http"
 
+	"time"
+
 	"github.com/go-playground/validator"
 )
 
 type Sensors struct {
-	Id          int    `json:"id"`
-	Sensorvalue int    `json:"sensor_value"`
-	Id1         int    `json:"id1"`
-	Id2         string `json:"id2"`
-	Timestamp   int    `json:"timestamp"`
+	Id          int       `json:"id"`
+	Sensorvalue int       `json:"sensor_value"`
+	Id1         int       `json:"id1"`
+	Id2         string    `json:"id2"`
+	Timestamp   time.Time `json:"timestamp"`
+}
+
+type SensorsStore struct {
+	Sensorvalue int    `json:"sensor_value"  validate:"required"`
+	Id1         int    `json:"id1"  validate:"required"`
+	Id2         string `json:"id2"  validate:"required"`
 }
 
 func FetchAllSensors() (Response, error) {
@@ -34,13 +42,12 @@ func FetchAllSensors() (Response, error) {
 
 	for rows.Next() {
 		err = rows.Scan(&obj.Id, &obj.Sensorvalue, &obj.Id1, &obj.Id2, &obj.Timestamp)
-		//fmt.Println(obj)
+
 		if err != nil {
 			return res, err
 		}
 
 		arrobj = append(arrobj, obj)
-
 	}
 
 	res.Status = http.StatusOK
@@ -52,16 +59,15 @@ func FetchAllSensors() (Response, error) {
 	return res, nil
 }
 
-func StoreSensors(sensorvalue int, id1 int, id2 string, timestamp int) (Response, error) {
+func StoreSensors(sensorvalue int, id1 int, id2 string) (Response, error) {
 	var res Response
 
 	v := validator.New()
 
-	var_sen := Sensors{
+	var_sen := SensorsStore{
 		Sensorvalue: sensorvalue,
 		Id1:         id1,
 		Id2:         id2,
-		Timestamp:   timestamp,
 	}
 
 	err := v.Struct(var_sen)
@@ -71,14 +77,14 @@ func StoreSensors(sensorvalue int, id1 int, id2 string, timestamp int) (Response
 
 	con := db.CreateCon()
 
-	sqlStatement := "INSERT sensors (sensor_value, id1, id2, timestamp) VALUES (?, ?, ?, ?)"
+	sqlStatement := "INSERT sensors (sensorvalue, id1, id2) VALUES (?, ?, ?)"
 
 	stmt, err := con.Prepare(sqlStatement)
 	if err != nil {
 		return res, err
 	}
 
-	result, err := stmt.Exec(sensorvalue, id1, id2, timestamp)
+	result, err := stmt.Exec(sensorvalue, id1, id2)
 	if err != nil {
 		return res, err
 	}
@@ -97,19 +103,19 @@ func StoreSensors(sensorvalue int, id1 int, id2 string, timestamp int) (Response
 	return res, nil
 }
 
-func UpdateSensors(id int, sensorvalue int, id1 int, id2 string, timestamp int) (Response, error) {
+func UpdateSensors(id int, sensorvalue int, id1 int, id2 string) (Response, error) {
 	var res Response
 
 	con := db.CreateCon()
 
-	sqlStatement := "UPDATE sensors SET sensor_value = ?, id1 = ?, id2 = ?, timestamp = ? WHERE id = ?"
+	sqlStatement := "UPDATE sensors SET sensorvalue = ?, id1 = ?, id2 = ? WHERE id = ?"
 
 	stmt, err := con.Prepare(sqlStatement)
 	if err != nil {
 		return res, err
 	}
 
-	result, err := stmt.Exec(sensorvalue, id1, id2, timestamp, id)
+	result, err := stmt.Exec(sensorvalue, id1, id2, id)
 	if err != nil {
 		return res, err
 	}
