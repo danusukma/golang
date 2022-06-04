@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fmt"
 	"golangsensors/db"
 	"net/http"
+	"strconv"
 
 	"time"
 
@@ -24,14 +24,20 @@ type SensorsStore struct {
 	Id2         string `json:"id2"  validate:"required"`
 }
 
-func FetchAllSensors() (Response, error) {
+func FetchAllSensors(id1 int, id2 string) (Response, error) {
 	var obj Sensors
 	var arrobj []Sensors
 	var res Response
+	var sqlStatement string
 
 	con := db.CreateCon()
 
-	sqlStatement := "SELECT * FROM sensors"
+	sqlStatement = "SELECT * FROM sensors "
+
+	if id1 > 0 && id2 != "'" {
+		sqlCondition := " WHERE id1 = " + strconv.Itoa(id1) + " AND id2 = '" + id2 + "'"
+		sqlStatement = sqlStatement + sqlCondition
+	}
 
 	rows, err := con.Query(sqlStatement)
 	defer rows.Close()
@@ -54,7 +60,7 @@ func FetchAllSensors() (Response, error) {
 	res.Message = "Success"
 	res.Data = arrobj
 
-	fmt.Println(res)
+	//fmt.Println(res)
 
 	return res, nil
 }

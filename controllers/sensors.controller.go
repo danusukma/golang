@@ -10,7 +10,13 @@ import (
 )
 
 func FetchAllSensors(c echo.Context) error {
-	result, err := models.FetchAllSensors()
+
+	id1 := c.FormValue("id1")
+	id2 := c.FormValue("id2")
+
+	conv_id1, err := strconv.Atoi(id1)
+
+	result, err := models.FetchAllSensors(conv_id1, id2)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
