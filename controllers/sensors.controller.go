@@ -14,9 +14,14 @@ func FetchAllSensors(c echo.Context) error {
 	id1 := c.FormValue("id1")
 	id2 := c.FormValue("id2")
 
-	conv_id1, err := strconv.Atoi(id1)
+	start_timestamp := c.FormValue("start_timestamp")
+	end_timestamp := c.FormValue("end_timestamp")
 
-	result, err := models.FetchAllSensors(conv_id1, id2)
+	conv_id1, err := strconv.Atoi(id1)
+	conv_start_timestamp, err := strconv.Atoi(start_timestamp)
+	conv_end_timestamp, err := strconv.Atoi(end_timestamp)
+
+	result, err := models.FetchAllSensors(conv_id1, id2, conv_start_timestamp, conv_end_timestamp)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}

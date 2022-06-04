@@ -24,7 +24,7 @@ type SensorsStore struct {
 	Id2         string `json:"id2"  validate:"required"`
 }
 
-func FetchAllSensors(id1 int, id2 string) (Response, error) {
+func FetchAllSensors(id1 int, id2 string, start_timestamp int, end_timestamp int) (Response, error) {
 	var obj Sensors
 	var arrobj []Sensors
 	var res Response
@@ -36,6 +36,11 @@ func FetchAllSensors(id1 int, id2 string) (Response, error) {
 
 	if id1 > 0 && id2 != "'" {
 		sqlCondition := " WHERE id1 = " + strconv.Itoa(id1) + " AND id2 = '" + id2 + "'"
+		sqlStatement = sqlStatement + sqlCondition
+	}
+
+	if start_timestamp > 0 && end_timestamp > 0 {
+		sqlCondition := " WHERE UNIX_TIMESTAMP(timestamp) >= " + strconv.Itoa(start_timestamp) + " AND UNIX_TIMESTAMP(timestamp) <= " + strconv.Itoa(end_timestamp) + ""
 		sqlStatement = sqlStatement + sqlCondition
 	}
 

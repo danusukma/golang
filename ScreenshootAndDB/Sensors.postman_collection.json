@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "2f19e386-05b8-4796-99ac-024cca3441e2",
+		"name": "Sensors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7562066"
+	},
+	"item": [
+		{
+			"name": "1- Hello",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:1234"
+			},
+			"response": []
+		},
+		{
+			"name": "4-Put Sensors",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "11",
+							"type": "text"
+						},
+						{
+							"key": "sensorvalue",
+							"value": "44",
+							"type": "text"
+						},
+						{
+							"key": "id1",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "id2",
+							"value": "A",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:1234/sensors"
+			},
+			"response": []
+		},
+		{
+			"name": "2-Get Sensors",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "sensorvalue",
+							"value": "55",
+							"type": "text"
+						},
+						{
+							"key": "id1",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "id2",
+							"value": "B",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:1234/sensors?start_timestamp=1654323676&end_timestamp=1654326457",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"sensors"
+					],
+					"query": [
+						{
+							"key": "start_timestamp",
+							"value": "1654323676"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "1654326457"
+						},
+						{
+							"key": "id1",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "id2",
+							"value": "C",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5-Delete Sensors",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:1234/sensors?idx=9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"sensors"
+					],
+					"query": [
+						{
+							"key": "idx",
+							"value": "9"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-Post Sensors -",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "sensorvalue",
+							"value": "44",
+							"type": "text"
+						},
+						{
+							"key": "id1",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "id2",
+							"value": "A",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:1234/sensors"
+			},
+			"response": []
+		}
+	]
+}
